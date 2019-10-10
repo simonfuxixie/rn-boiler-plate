@@ -16,7 +16,7 @@ import Icon from '@expo/vector-icons/Ionicons';
                    - Tab 1 - FeedStack
                    - Tab 2 - ProfileStack
                    - Tab 3 - SettingsStack
-            - Plans 
+            - Plans
             - Any files you don't want to be a part of the Tab Navigator can go here.
  */
 
@@ -78,6 +78,10 @@ class Feed extends Component {
     return (
       <View style={styles.container}>
         <Text>Feed</Text>
+        <Button
+          title="Go To Detail Screen"
+          onPress={() => this.props.navigation.navigate('Detail')}
+        />
       </View>
     );
   }
@@ -103,16 +107,92 @@ class Profile extends Component {
   }
 }
 
+const Detail = props => (
+  <View style={styles.container}>
+    <Text>Detail detail</Text>
+  </View>
+);
+
+
+
+const FeedStack = createStackNavigator(
+  {
+    Feed: {
+      screen: Feed,
+      navigationOptions: ({ navigation }) => {
+        return {
+          headerTitle: 'Feed',
+          headerLeft: (
+            <Icon
+              style={{ paddingLeft: 10 }}
+              onPress={() => navigation.openDrawer()}
+              name="md-menu"
+              size={30}
+            />
+          )
+        };
+      }
+    },
+    Detail: {
+      screen: Detail
+    }
+  },
+  {
+    defaultNavigationOptions: {
+      gesturesEnabled: false
+    }
+  }
+);
+
+const ProfileStack = createStackNavigator({
+  Profile: {
+    screen: Profile,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTitle: 'Profile',
+        headerLeft: (
+          <Icon
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()}
+            name="md-menu"
+            size={30}
+          />
+        )
+      };
+    }
+  }
+});
+
+const SettingsStack = createStackNavigator({
+  Settings: {
+    screen: Settings,
+    navigationOptions: ({ navigation }) => {
+      return {
+        headerTitle: 'Settings',
+        headerLeft: (
+          <Icon
+            style={{ paddingLeft: 10 }}
+            onPress={() => navigation.openDrawer()}
+            name="md-menu"
+            size={30}
+          />
+        )
+      };
+    }
+  }
+});
+
 const DashboardTabNavigator = createBottomTabNavigator(
   {
-    Feed,
-    Profile,
-    Settings
+    FeedStack,
+    ProfileStack,
+    SettingsStack
   },
   {
     navigationOptions: ({ navigation }) => {
       const { routeName } = navigation.state.routes[navigation.state.index];
       return {
+        header: null,
         headerTitle: routeName
       };
     }
